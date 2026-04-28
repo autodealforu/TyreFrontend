@@ -85,7 +85,7 @@ const getImageUrl = (imagePath: string | undefined): string => {
     return imagePath;
   }
 
-  const baseUrl = API_URL || 'http://localhost:9042';
+  const baseUrl = API_URL || 'http://13.211.190.176:9042';
   const cleanPath = imagePath.startsWith('/') ? imagePath.slice(1) : imagePath;
   return `${baseUrl}/${cleanPath}`;
 };

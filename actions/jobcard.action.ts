@@ -312,7 +312,7 @@ function transformJobCard(rawJobCard: RawJobCard): JobCard {
 
 export async function getJobCards(token: string, customerId?: string) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9042';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://13.211.190.176:9042';
 
     // Build query params to filter by customer if customerId is provided
     let url = `${apiUrl}/api/job-cards`;

@@ -104,7 +104,7 @@ const ContactUs = () => {
     setIsSubmitting(true)
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:9042"
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://13.211.190.176:9042"
       const response = await axios.post(`${apiUrl}/api/contacts`, formData)
 
       if (response.status === 201 || response.status === 200) {
