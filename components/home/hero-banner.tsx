@@ -170,7 +170,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
           src={`${API_URL}${currentBanner.video}`}
           autoPlay
           loop
-          muted={isMuted}
+          muted={true}
           playsInline
           preload='auto'
         />
