@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // --- ADD THIS LINE HERE ---
+  staticPageGenerationTimeout: 300, 
+  // --------------------------
+
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -10,10 +14,8 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
-    // Improve stability during development
     forceSwcTransforms: false,
   },
-  // Ensure proper handling of authentication during development
   devIndicators: {
     buildActivity: false,
   },
