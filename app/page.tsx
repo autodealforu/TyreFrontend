@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import MultiProductHomepage from '@/components/homepage-enhanced';
 import axios from 'axios';
 // import MultiProductHomepage from '@/components/homepage-enhanced';
