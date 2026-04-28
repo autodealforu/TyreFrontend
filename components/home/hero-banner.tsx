@@ -149,7 +149,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
 
   // Fallback: no banners — show static hero
   if (!validBanners.length) {
-    return <StaticHero />;
+    return <StaticHero introFinished={introFinished} />;
   }
 
   const currentBanner = validBanners[currentIndex];
@@ -479,7 +479,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
 }
 
 // Fallback static hero when no banners exist
-function StaticHero() {
+function StaticHero({ introFinished }: { introFinished: boolean }) {
   return (
     <section className='relative min-h-screen flex items-center justify-center overflow-hidden'>
       <div className='absolute inset-0 bg-linear-to-br from-gray-900 via-gray-800 to-black' />
