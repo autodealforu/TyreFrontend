@@ -167,7 +167,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
           key={`video-${currentIndex}`}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isTransitioning ? 'opacity-0' : 'opacity-100'
             }`}
-          src={`${API_URL}/${currentBanner.video}`}
+          src={`${API_URL}${currentBanner.video}`}
           crossOrigin="anonymous"
           autoPlay
           loop
@@ -181,7 +181,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
             }`}
         >
           <Image
-            src={`${API_URL}/${currentBanner.image}`}
+            src={`${API_URL}${currentBanner.image}`}
             alt={currentBanner.name || 'Banner'}
             fill
             className='object-cover'
