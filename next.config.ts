@@ -9,6 +9,10 @@ const nextConfig: NextConfig = {
         hostname: 'tyre-api.dhwanibytes.com',
       },
       {
+        protocol: 'https',
+        hostname: 'tyre-api.duckdns.org',
+      },
+      {
         protocol: 'http',
         hostname: 'localhost',
       },
