@@ -339,7 +339,7 @@ export default function MultiProductHomepage({
                       </Link>
 
                       <Link href={productLink}>
-                        <h3 className='font-bold text-lg mb-2 line-clamp-2 text-foreground cursor-pointer hover:text-brand-orange transition-colors'>
+                        <h3 className='font-bold text-lg mb-2 line-clamp-2 break-words text-foreground cursor-pointer hover:text-brand-orange transition-colors'>
                           {product.product_category === 'TYRE' ? (
                             <>
                               {product.tyre?.productBrand?.name}{' '}
@@ -363,25 +363,25 @@ export default function MultiProductHomepage({
                         </h3>
                       </Link>
 
-                      <p className='text-sm text-muted-foreground mb-4 line-clamp-2'>
+                      <p className='text-sm text-muted-foreground mb-4 line-clamp-2 break-words'>
                         {getProductSubtitle(product)}
                       </p>
 
-                      <div className='flex justify-between items-center mb-4'>
-                        <div className='flex items-center space-x-1'>
+                      <div className='flex flex-wrap justify-between items-center mb-4 gap-2'>
+                        <div className='flex items-center space-x-1 shrink-0'>
                           <Star className='h-4 w-4 fill-yellow-400 text-yellow-400' />
                           <span className='text-sm font-medium'>4.5</span>
                           <span className='text-xs text-muted-foreground'>
                             (124)
                           </span>
                         </div>
-                        <span className='text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full'>
+                        <span className='text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full truncate max-w-[120px]'>
                           {product.vendor?.store_name || 'Premium Store'}
                         </span>
                       </div>
 
-                      <div className='flex justify-between items-center'>
-                        <div className='flex flex-col'>
+                      <div className='flex flex-wrap justify-between items-center gap-3'>
+                        <div className='flex flex-col shrink-0'>
                           {product.mrp_price > product.auto_deal_price && (
                             <span className='text-sm text-muted-foreground line-through'>
                               {formatPrice(product.mrp_price)}
@@ -391,8 +391,8 @@ export default function MultiProductHomepage({
                             {formatPrice(product.auto_deal_price)}
                           </span>
                         </div>
-                        <Link href={productLink}>
-                          <Button size='sm' className='btn-primary'>
+                        <Link href={productLink} className='shrink-0 w-full xl:w-auto mt-2 xl:mt-0'>
+                          <Button size='sm' className='btn-primary w-full'>
                             View Details
                           </Button>
                         </Link>
