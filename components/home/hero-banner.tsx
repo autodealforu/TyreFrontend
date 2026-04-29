@@ -167,7 +167,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
           key={`video-${currentIndex}`}
           className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${isTransitioning ? 'opacity-0' : 'opacity-100'
             }`}
-          src="http://13.211.190.176/uploads/1777411231337-42479-431756043.mp4"
+          src={`${API_URL}/${currentBanner.video}`}
           crossOrigin="anonymous"
           autoPlay
           loop
