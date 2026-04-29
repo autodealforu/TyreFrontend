@@ -34,7 +34,7 @@ export default async function BlogPage() {
                 <Card className='group h-full border-none shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden bg-white/10 rounded-2xl'>
                   <div className='relative h-64 w-full overflow-hidden'>
                     <img
-                      src={blog.image ? `${API_URL}${blog.image}` : '/placeholder-blog.jpg'}
+                      src={blog.image ? `${API_URL}${blog.image.replace(/\\/g, '/').startsWith('/') ? '' : '/'}${blog.image.replace(/\\/g, '/')}` : '/placeholder-blog.jpg'}
                       alt={blog.title}
                       className='w-full h-full object-cover group-hover:scale-110 transition-transform duration-500'
                     />

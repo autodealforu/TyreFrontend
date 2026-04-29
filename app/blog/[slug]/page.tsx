@@ -24,7 +24,7 @@ export default async function BlogDetailsPage({ params }: PageProps) {
       {/* Header Section */}
       <div className='relative w-full h-[60vh] md:h-[70vh] bg-gray-900'>
         <img
-          src={blog.image ? `${API_URL}${blog.image}` : '/placeholder-blog.jpg'}
+          src={blog.image ? `${API_URL}${blog.image.replace(/\\/g, '/').startsWith('/') ? '' : '/'}${blog.image.replace(/\\/g, '/')}` : '/placeholder-blog.jpg'}
           alt={blog.title}
           className='absolute inset-0 w-full h-full object-cover opacity-60'
         />
@@ -93,7 +93,7 @@ export default async function BlogDetailsPage({ params }: PageProps) {
                 {blog.gallery.map((img: string, idx: number) => (
                   <div key={idx} className='relative h-64 rounded-2xl overflow-hidden group shadow-sm hover:shadow-xl transition-all duration-300'>
                     <img
-                      src={`${API_URL}${img}`}
+                      src={`${API_URL}${img.replace(/\\/g, '/').startsWith('/') ? '' : '/'}${img.replace(/\\/g, '/')}`}
                       alt={`Gallery image ${idx + 1}`}
                       className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
                     />
