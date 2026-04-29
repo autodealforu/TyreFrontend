@@ -181,7 +181,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
             }`}
         >
           <Image
-            src={`${API_URL}${currentBanner.image}`}
+            src={`${API_URL}/${currentBanner.image}`}
             alt={currentBanner.name || 'Banner'}
             fill
             className='object-cover'
