@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'tyre-api.duckdns.org',
+        hostname: 'api.autodeal4u.in',
+        pathname: '/**',
       },
       {
         protocol: 'http',
