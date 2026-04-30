@@ -174,7 +174,7 @@ export default function MultiProductHomepage({
       {/* Dynamic Image Slider */}
       <ImageSlider banners={banners} />
 
-      <section className='py-10 px-20 bg-linear-to-b from-muted/50 to-background'>
+      <section className='py-10 px-4 md:px-20 bg-linear-to-b from-muted/50 to-background'>
         <div className='container mx-auto px-4'>
           <div className='text-center mb-16 animate-fade-in-up'>
             <Badge className='mb-4 bg-brand-orange/10 text-brand-orange border-brand-orange/20'>
@@ -233,7 +233,7 @@ export default function MultiProductHomepage({
         </div>
       </section>
 
-      <section className='py-3 px-20 bg-background'>
+      <section className='py-3 px-4 md:px-20 bg-background'>
         <div className='container mx-auto px-4'>
           <div className='text-center mb-16'>
             <h2 className='text-4xl font-bold mb-6 text-gradient'>
@@ -466,7 +466,7 @@ export default function MultiProductHomepage({
       {/* Store Locator Indian Map */}
       <StoreLocatorMap />
 
-      <section className='pb-20  px-20 bg-linear-to-b from-muted/30 to-background'>
+      <section className='pb-20 px-4 md:px-20 bg-linear-to-b from-muted/30 to-background'>
         <div className='container mx-auto px-4'>
           <div className='text-center mb-16'>
             <h2 className='text-4xl font-bold mb-6 text-gradient'>

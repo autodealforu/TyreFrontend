@@ -250,11 +250,11 @@ export default function ThankYou() {
                               <p className='text-xs'>100% Protection with Autodeal4U</p>
                            </div>
                         </div>
-                        <div className='flex gap-4 w-full sm:w-auto'>
-                           <Button asChild variant='outline' className='rounded-full border-[#14213d] text-[#14213d] flex-1 sm:flex-none py-6 px-10 font-bold hover:bg-[#14213d]/5'>
+                        <div className='flex flex-col sm:flex-row gap-4 w-full sm:w-auto'>
+                           <Button asChild variant='outline' className='rounded-full border-[#14213d] text-[#14213d] flex-1 sm:flex-none py-4 sm:py-6 px-4 sm:px-10 font-bold hover:bg-[#14213d]/5 text-sm sm:text-base'>
                               <Link href='/account/orders'>Track Order</Link>
                            </Button>
-                           <Button asChild className='bg-[#14213d] hover:bg-[#14213d]/90 rounded-full flex-1 sm:flex-none py-6 px-10 font-bold'>
+                           <Button asChild className='bg-[#14213d] hover:bg-[#14213d]/90 rounded-full flex-1 sm:flex-none py-4 sm:py-6 px-4 sm:px-10 font-bold text-sm sm:text-base'>
                               <Link href='/'>Continue Shopping</Link>
                            </Button>
                         </div>

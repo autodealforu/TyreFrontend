@@ -33,7 +33,7 @@ export default function VideoCards({ banners }: { banners: IBanner[] }) {
   if (!youtubeVideos.length) return null;
 
   return (
-    <section className='py-20 px-20 bg-linear-to-b from-muted/30 to-background'>
+    <section className='py-20 px-4 md:px-20 bg-linear-to-b from-muted/30 to-background'>
       <div className='container mx-auto px-4'>
         <div className='text-center mb-14'>
           <Badge className='mb-4 bg-red-500/10 text-red-600 border-red-500/20 text-sm px-4 py-1.5'>

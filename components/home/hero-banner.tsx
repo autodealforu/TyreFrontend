@@ -259,7 +259,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
                 <Link href='/tyres'>
                   <Button
                     size='lg'
-                    className='bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-10 py-7 text-lg font-bold rounded-2xl shadow-xl shadow-orange-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/40 hover:-translate-y-1'
+                    className='bg-linear-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-4 sm:px-10 sm:py-7 text-base sm:text-lg font-bold rounded-2xl shadow-xl shadow-orange-500/30 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/40 hover:-translate-y-1'
                   >
                     Explore Products
                     <ArrowRight className='ml-2 h-6 w-6' />
@@ -269,7 +269,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
                   <Button
                     size='lg'
                     variant='outline'
-                    className='px-10 py-7 text-lg font-bold text-white border-white/30 hover:bg-white hover:text-gray-900 backdrop-blur-md bg-white/5 rounded-2xl transition-all duration-300 hover:-translate-y-1'
+                    className='px-6 py-4 sm:px-10 sm:py-7 text-base sm:text-lg font-bold text-white border-white/30 hover:bg-white hover:text-gray-900 backdrop-blur-md bg-white/5 rounded-2xl transition-all duration-300 hover:-translate-y-1'
                   >
                     <Phone className='mr-2 h-6 w-6' />
                     Get Expert Advice
@@ -281,7 +281,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
               <div className='relative mb-4'>
                 <button
                   onClick={() => setShowSearch(!showSearch)}
-                  className='inline-flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white font-black text-lg px-10 py-5 rounded-full shadow-lg shadow-red-600/30 transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/40 hover:-translate-y-1 uppercase tracking-widest'
+                  className='inline-flex items-center gap-3 bg-red-600 hover:bg-red-700 text-white font-black text-base sm:text-lg px-6 py-4 sm:px-10 sm:py-5 rounded-full shadow-lg shadow-red-600/30 transition-all duration-300 hover:shadow-2xl hover:shadow-red-600/40 hover:-translate-y-1 uppercase tracking-widest'
                 >
                   <Search className='w-6 h-6' />
                   Find Products
@@ -298,9 +298,9 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
       {showSearch && (
         <div className='fixed inset-0 z-50 flex items-center justify-center p-4'>
           <div className='absolute inset-0 bg-black/60 backdrop-blur-sm' onClick={() => setShowSearch(false)} />
-          <div className='bg-white w-full max-w-6xl shadow-2xl relative z-30 p-8'>
+          <div className='bg-white w-full max-w-6xl shadow-2xl relative z-30 p-4 sm:p-8'>
             <div className='flex flex-col items-center border-b border-gray-300 pb-4 mb-8 w-full relative h-12'>
-              <div className='flex space-x-12 absolute left-0 bottom-0'>
+              <div className='flex space-x-4 sm:space-x-12 absolute left-0 bottom-0'>
                 <button
                   onClick={() => setSearchTab('TYRE')}
                   className={`text-lg italic font-extrabold uppercase tracking-widest px-4 pb-4 transition-colors ${searchTab === 'TYRE' ? 'text-red-600 border-b-2 border-red-600 translate-y-0.5' : 'text-gray-400 hover:text-gray-600'}`}
@@ -405,7 +405,7 @@ export default function HeroBanner({ banners }: { banners: IBanner[] }) {
             <div className='flex items-center gap-12 justify-center pb-2'>
               <button
                 onClick={handleSearch}
-                className='inline-flex items-center gap-2 bg-[#dc3545] hover:bg-[#c82333] text-white italic font-extrabold px-12 py-3 rounded-full transition-all duration-300 uppercase tracking-widest text-lg'
+                className='inline-flex items-center gap-2 bg-[#dc3545] hover:bg-[#c82333] text-white italic font-extrabold px-6 sm:px-12 py-3 rounded-full transition-all duration-300 uppercase tracking-widest text-base sm:text-lg'
               >
                 FIND {searchTab === 'TYRE' ? 'TYRES' : 'ALLOYS'}
               </button>

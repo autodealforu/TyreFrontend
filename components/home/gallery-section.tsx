@@ -27,7 +27,7 @@ export default function GallerySection({ banners }: { banners: IBanner[] }) {
 
   return (
     <>
-      <section className='py-20 px-20 bg-linear-to-b from-background to-muted/30'>
+      <section className='py-20 px-4 md:px-20 bg-linear-to-b from-background to-muted/30'>
         <div className='container mx-auto px-4'>
           <div className='text-center mb-14'>
             <Badge className='mb-4 bg-orange-500/10 text-orange-600 border-orange-500/20 text-sm px-4 py-1.5'>

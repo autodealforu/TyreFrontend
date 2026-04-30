@@ -515,7 +515,7 @@ export default function CheckoutEnhanced() {
     <div className='min-h-screen bg-[#e5e5e5]'>
       {/* Breadcrumb */}
       <div className='container mx-auto px-4 py-6'>
-        <div className='bg-white rounded-lg border border-gray-200 p-4 shadow-sm'>
+        <div className='bg-white rounded-lg border border-gray-200 p-4 shadow-sm overflow-x-auto whitespace-nowrap'>
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem>
@@ -613,7 +613,7 @@ export default function CheckoutEnhanced() {
                 </div>
                 {index < steps.length - 1 && (
                   <div
-                    className={`h-1 w-20 mx-6 rounded-full transition-all duration-300 ${
+                    className={`h-1 w-10 sm:w-20 mx-2 sm:mx-6 rounded-full transition-all duration-300 ${
                       checkoutState.step > step.id
                         ? 'bg-[#fca311]'
                         : 'bg-gray-300'
@@ -664,10 +664,10 @@ export default function CheckoutEnhanced() {
                             id={`address-${index}`}
                             className='mt-1'
                           />
-                          <div className='flex-1'>
+                          <div className='flex-1 min-w-0'>
                             <Label
                               htmlFor={`address-${index}`}
-                              className='cursor-pointer'
+                              className='cursor-pointer block break-words whitespace-normal'
                             >
                               <div className='flex items-center gap-2 mb-1'>
                                 <span className='font-medium text-[#14213d]'>
@@ -682,18 +682,18 @@ export default function CheckoutEnhanced() {
                                   </Badge>
                                 )}
                               </div>
-                              <div className='text-sm font-medium text-gray-600'>
+                              <div className='text-sm font-medium text-gray-600 break-words mt-1'>
                                 {address.name}
                               </div>
-                              <div className='text-sm text-gray-600'>
+                              <div className='text-sm text-gray-600 break-words'>
                                 {address.address_1}
                                 {address.address_2 && `, ${address.address_2}`}
                               </div>
-                              <div className='text-sm text-gray-600'>
+                              <div className='text-sm text-gray-600 break-words'>
                                 {address.city}, {address.state}{' '}
                                 {address.pincode}
                               </div>
-                              <div className='text-sm text-gray-600'>
+                              <div className='text-sm text-gray-600 break-words'>
                                 {address.phone}
                               </div>
                             </Label>
