@@ -352,14 +352,14 @@ export default function MultiVendorProductListing({
                   href={`/product/${product.productSpec[0]._id}?type=${productType}`}
                   className='block'
                 >
-                  <div className='aspect-square bg-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-200 transition-colors'>
+                  <div className='aspect-square bg-white border border-gray-100 rounded-lg flex items-center justify-center cursor-pointer hover:bg-gray-50 transition-colors p-2'>
                     {selectedVendor?.product_images?.[0] ? (
                       <Image
                         src={selectedVendor.product_images[0]}
                         alt={getProductName(product)}
                         width={400}
                         height={400}
-                        className='w-full h-full object-cover rounded-lg'
+                        className='w-full h-full object-contain'
                       />
                     ) : (
                       <span className='text-gray-400 text-sm'>No Image</span>

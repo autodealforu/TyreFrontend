@@ -286,7 +286,7 @@ export default function MultiProductHomepage({
                   >
                     <CardContent className='p-6'>
                       <Link href={productLink}>
-                        <div className='relative mb-6 cursor-pointer'>
+                        <div className='relative mb-6 cursor-pointer aspect-square bg-white rounded-xl overflow-hidden flex items-center justify-center border border-gray-100'>
                           {(() => {
                             const imagePath =
                               product.tyre?.productImages?.[0] ||
@@ -312,20 +312,20 @@ export default function MultiProductHomepage({
                                 : `${apiUrl}${cleanPath}`;
 
                               return (
-                                <img
-                                  src={imageUrl}
-                                  alt='Product image'
-                                  className='w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300'
-                                  onError={(e) => {
-                                    (e.target as HTMLImageElement).style.display = 'none';
-                                    (e.target as HTMLImageElement).parentElement!.innerHTML = `<div class="w-full h-48 bg-linear-to-br from-gray-100 to-gray-50 rounded-xl flex items-center justify-center"><span class="text-5xl opacity-50">${categoryConfig[activeCategory].icon}</span></div>`;
-                                  }}
-                                />
+                                 <img
+                                   src={imageUrl}
+                                   alt='Product image'
+                                   className='w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 p-2'
+                                   onError={(e) => {
+                                     (e.target as HTMLImageElement).style.display = 'none';
+                                     (e.target as HTMLImageElement).parentElement!.innerHTML = `<div class="w-full h-full bg-linear-to-br from-gray-100 to-gray-50 flex items-center justify-center"><span class="text-5xl opacity-50">${categoryConfig[activeCategory].icon}</span></div>`;
+                                   }}
+                                 />
                               );
                             }
 
                             return (
-                              <div className='w-full h-48 bg-linear-to-br from-muted to-muted/50 rounded-xl flex items-center justify-center'>
+                              <div className='w-full h-full bg-linear-to-br from-muted to-muted/50 flex items-center justify-center'>
                                 <span className='text-5xl opacity-50'>
                                   {categoryConfig[activeCategory].icon}
                                 </span>
