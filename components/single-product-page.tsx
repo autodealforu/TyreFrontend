@@ -290,6 +290,7 @@ export default function SingleProductPage({
     if (!productSpec) return 'Product';
 
     switch (productType) {
+      case 'TYRE':
         const brand = product.productSpec?.productBrand?.name || product.productSpec?.productBrand?.[0]?.name || '';
         const spec = product.productSpec;
         const width = spec.tyreWidth?.[0]?.name || spec.tyreWidth?.name || '';
