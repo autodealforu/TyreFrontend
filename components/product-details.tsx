@@ -262,10 +262,15 @@ export default function StaticProductDetails({
                     : ''}
                   {tyre?.construction}
                   {tyre?.rimDiameter?.name}
+                  {' '}
                   {tyre?.plyRating?.name}
+                  {' '}
                   {tyre?.loadIndex?.name}
+                  {' '}
                   {tyre?.speedSymbol?.name}
+                  {' '}
                   {tyre?.productThreadPattern?.name}
+                  {' '}
                   {tyre?.unit}
                 </BreadcrumbPage>
               </BreadcrumbItem>
@@ -355,10 +360,15 @@ export default function StaticProductDetails({
                   : ''}
                 {tyre?.construction}
                 {tyre?.rimDiameter?.name}
+                {' '}
                 {tyre?.plyRating?.name}
+                {' '}
                 {tyre?.loadIndex?.name}
+                {' '}
                 {tyre?.speedSymbol?.name}
+                {' '}
                 {tyre?.productThreadPattern?.name}
+                {' '}
                 {tyre?.unit}
               </h1>
               <p className='text-lg text-slate-600 mb-6'>

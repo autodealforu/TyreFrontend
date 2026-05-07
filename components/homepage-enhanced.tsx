@@ -105,10 +105,15 @@ export default function MultiProductHomepage({
                 : ''}
               {product.tyre?.construction}
               {product.tyre?.rimDiameter?.name}
+              {' '}
               {product.tyre?.plyRating?.name}
+              {' '}
               {product.tyre?.loadIndex?.name}
+              {' '}
               {product.tyre?.speedSymbol?.name}
+              {' '}
               {product.tyre?.productThreadPattern?.name}
+              {' '}
               {product.tyre?.unit}
             </span>
           </>
@@ -350,10 +355,15 @@ export default function MultiProductHomepage({
                                   : ''}
                                 {product.tyre?.construction}
                                 {product.tyre?.rimDiameter?.name}
+                                {' '}
                                 {product.tyre?.plyRating?.name}
+                                {' '}
                                 {product.tyre?.loadIndex?.name}
+                                {' '}
                                 {product.tyre?.speedSymbol?.name}
+                                {' '}
                                 {product.tyre?.productThreadPattern?.name}
+                                {' '}
                                 {product.tyre?.unit}
                               </span>
                             </>

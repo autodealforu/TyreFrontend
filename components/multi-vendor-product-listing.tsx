@@ -179,11 +179,17 @@ export default function MultiVendorProductListing({
 
     switch (productType) {
       case 'TYRE':
-        return `${spec.productBrand?.[0]?.name || 'Unknown Brand'} ${
-          spec.tyreWidth?.[0]?.name || ''
-        }/${spec.aspectRatio?.[0]?.name || ''} R${
-          spec.rimDiameter?.[0]?.name || ''
-        }`;
+        const brand = spec.productBrand?.name || 'Unknown Brand';
+        const size = `${spec.tyreWidth?.name || ''}/${spec.aspectRatio?.name || ''}${spec.construction || 'R'}${spec.rimDiameter?.name || ''}`;
+        const otherSpecs = [
+          spec.plyRating?.name,
+          spec.loadIndex?.name,
+          spec.speedSymbol?.name,
+          spec.productThreadPattern?.name,
+          spec.unit
+        ].filter(Boolean).join(' ');
+        
+        return `${brand} ${size}${otherSpecs ? ' ' + otherSpecs : ''}`.trim();
       case 'ALLOY_WHEEL':
         return `${spec.alloyBrand?.[0]?.name || 'Unknown Brand'} ${
           spec.alloyDesignName || 'Wheel'

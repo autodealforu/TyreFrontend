@@ -256,16 +256,21 @@ export default function SingleProductPage({
           <>
             {productSpec.productBrand?.name}{' '}
             <span className='font-medium text-gray-600'>
-              {productSpec.tyreWidth?.[0]?.name}
+              {productSpec.tyreWidth?.name}
               {productSpec.tyreWidthType === 'IN MM'
-                ? `/${productSpec.aspectRatio?.[0]?.name || ''}`
+                ? `/${productSpec.aspectRatio?.name}`
                 : ''}
               {productSpec.construction}
-              {productSpec.rimDiameter?.[0]?.name}
-              {productSpec.plyRating?.[0]?.name}
-              {productSpec.loadIndex?.[0]?.name}
-              {productSpec.speedSymbol?.[0]?.name}
-              {productSpec.productThreadPattern?.[0]?.name}
+              {productSpec.rimDiameter?.name}
+              {' '}
+              {productSpec.plyRating?.name}
+              {' '}
+              {productSpec.loadIndex?.name}
+              {' '}
+              {productSpec.speedSymbol?.name}
+              {' '}
+              {productSpec.productThreadPattern?.name}
+              {' '}
               {productSpec.unit}
             </span>
           </>
@@ -281,23 +286,21 @@ export default function SingleProductPage({
     }
   };
 
-  const getProductNameString = () => {
+  const getProductNameString = (product: any) => {
     if (!productSpec) return 'Product';
 
     switch (productType) {
       case 'TYRE':
-        const brand = productSpec.productBrand?.name || '';
+        const brand = product.productSpec?.productBrand?.name || '';
+        const spec = product.productSpec;
         const specs = [
-          productSpec.tyreWidth?.[0]?.name,
-          productSpec.tyreWidthType === 'IN MM' ? `/${productSpec.aspectRatio?.[0]?.name || ''}` : '',
-          productSpec.construction,
-          productSpec.rimDiameter?.[0]?.name,
-          productSpec.plyRating?.[0]?.name,
-          productSpec.loadIndex?.[0]?.name,
-          productSpec.speedSymbol?.[0]?.name,
-          productSpec.productThreadPattern?.[0]?.name,
-          productSpec.unit
-        ].join('').trim();
+          `${spec.tyreWidth?.name || ''}${spec.tyreWidthType === 'IN MM' ? `/${spec.aspectRatio?.name || ''}` : ''}${spec.construction || ''}${spec.rimDiameter?.name || ''}`,
+          spec.plyRating?.name,
+          spec.loadIndex?.name,
+          spec.speedSymbol?.name,
+          spec.productThreadPattern?.name,
+          spec.unit
+        ].filter(Boolean).join(' ').trim();
         return `${brand} ${specs}`.trim();
       case 'ALLOY_WHEEL':
         return `${productSpec.alloyBrand?.name || 'Unknown Brand'} ${productSpec.alloyDiameterInches?.name || ''
@@ -383,16 +386,21 @@ export default function SingleProductPage({
                 <>
                   {productSpec.productBrand?.name}{' '}
                   <span className='font-medium text-gray-600'>
-                    {productSpec.tyreWidth?.[0]?.name}
+                    {productSpec.tyreWidth?.name}
                     {productSpec.tyreWidthType === 'IN MM'
-                      ? `/${productSpec.aspectRatio?.[0]?.name || ''}`
+                      ? `/${productSpec.aspectRatio?.name}`
                       : ''}
                     {productSpec.construction}
-                    {productSpec.rimDiameter?.[0]?.name}
-                    {productSpec.plyRating?.[0]?.name}
-                    {productSpec.loadIndex?.[0]?.name}
-                    {productSpec.speedSymbol?.[0]?.name}
-                    {productSpec.productThreadPattern?.[0]?.name}
+                    {productSpec.rimDiameter?.name}
+                    {' '}
+                    {productSpec.plyRating?.name}
+                    {' '}
+                    {productSpec.loadIndex?.name}
+                    {' '}
+                    {productSpec.speedSymbol?.name}
+                    {' '}
+                    {productSpec.productThreadPattern?.name}
+                    {' '}
                     {productSpec.unit}
                   </span>
                 </>

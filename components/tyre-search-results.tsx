@@ -1505,6 +1505,16 @@ export default function StaticSearch({
                                 {tyre?.aspectRatio?.name}
                                 {tyre?.construction}
                                 {tyre?.rimDiameter?.name}
+                                {' '}
+                                {tyre?.plyRating?.name}
+                                {' '}
+                                {tyre?.loadIndex?.name}
+                                {' '}
+                                {tyre?.speedSymbol?.name}
+                                {' '}
+                                {tyre?.productThreadPattern?.name}
+                                {' '}
+                                {tyre?.unit}
                               </h3>
                             </div>
 
@@ -1624,6 +1634,16 @@ export default function StaticSearch({
                                   {tyre?.aspectRatio?.name}
                                   {tyre?.construction}
                                   {tyre?.rimDiameter?.name}
+                                  {' '}
+                                  {tyre?.plyRating?.name}
+                                  {' '}
+                                  {tyre?.loadIndex?.name}
+                                  {' '}
+                                  {tyre?.speedSymbol?.name}
+                                  {' '}
+                                  {tyre?.productThreadPattern?.name}
+                                  {' '}
+                                  {tyre?.unit}
                                 </h3>
                                 <p className='text-sm text-muted-foreground mb-2'>
                                   {tyre?.tyreWidth?.name}/
