@@ -1501,18 +1501,18 @@ export default function StaticSearch({
                                 {tyre?.productBrand?.name}
                               </p>
                               <h3 className='font-semibold text-sm text-gray-900 leading-tight'>
-                                {tyre?.tyreWidth?.name}/
-                                {tyre?.aspectRatio?.name}
+                                {tyre?.tyreWidth?.[0]?.name || tyre?.tyreWidth?.name}/
+                                {tyre?.aspectRatio?.[0]?.name || tyre?.aspectRatio?.name}
                                 {tyre?.construction}
-                                {tyre?.rimDiameter?.name}
+                                {tyre?.rimDiameter?.[0]?.name || tyre?.rimDiameter?.name}
                                 {' '}
-                                {tyre?.plyRating?.name}
+                                {tyre?.plyRating?.[0]?.name || tyre?.plyRating?.name}
                                 {' '}
-                                {tyre?.loadIndex?.name}
+                                {tyre?.loadIndex?.[0]?.name || tyre?.loadIndex?.name}
                                 {' '}
-                                {tyre?.speedSymbol?.name}
+                                {tyre?.speedSymbol?.[0]?.name || tyre?.speedSymbol?.name}
                                 {' '}
-                                {tyre?.productThreadPattern?.name}
+                                {tyre?.productThreadPattern?.[0]?.name || tyre?.productThreadPattern?.name}
                                 {' '}
                                 {tyre?.unit}
                               </h3>
@@ -1630,18 +1630,18 @@ export default function StaticSearch({
                                 </div>
                                 <h3 className='text-xl font-semibold mb-2'>
                                   {tyre?.productBrand?.name}{' '}
-                                  {tyre?.tyreWidth?.name}/
-                                  {tyre?.aspectRatio?.name}
+                                  {tyre?.tyreWidth?.[0]?.name || tyre?.tyreWidth?.name}/
+                                  {tyre?.aspectRatio?.[0]?.name || tyre?.aspectRatio?.name}
                                   {tyre?.construction}
-                                  {tyre?.rimDiameter?.name}
+                                  {tyre?.rimDiameter?.[0]?.name || tyre?.rimDiameter?.name}
                                   {' '}
-                                  {tyre?.plyRating?.name}
+                                  {tyre?.plyRating?.[0]?.name || tyre?.plyRating?.name}
                                   {' '}
-                                  {tyre?.loadIndex?.name}
+                                  {tyre?.loadIndex?.[0]?.name || tyre?.loadIndex?.name}
                                   {' '}
-                                  {tyre?.speedSymbol?.name}
+                                  {tyre?.speedSymbol?.[0]?.name || tyre?.speedSymbol?.name}
                                   {' '}
-                                  {tyre?.productThreadPattern?.name}
+                                  {tyre?.productThreadPattern?.[0]?.name || tyre?.productThreadPattern?.name}
                                   {' '}
                                   {tyre?.unit}
                                 </h3>

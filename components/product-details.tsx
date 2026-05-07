@@ -256,20 +256,20 @@ export default function StaticProductDetails({
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className='text-slate-900 font-medium'>
-                  {tyre?.productBrand?.name} {tyre?.tyreWidth?.name}
+                  {tyre?.productBrand?.name} {tyre?.tyreWidth?.[0]?.name || tyre?.tyreWidth?.name}
                   {tyre?.tyreWidthType === 'IN MM'
-                    ? `/${tyre?.aspectRatio?.name}`
+                    ? (tyre?.aspectRatio?.[0]?.name || tyre?.aspectRatio?.name ? `/${tyre?.aspectRatio?.[0]?.name || tyre?.aspectRatio?.name}` : '')
                     : ''}
                   {tyre?.construction}
-                  {tyre?.rimDiameter?.name}
+                  {tyre?.rimDiameter?.[0]?.name || tyre?.rimDiameter?.name}
                   {' '}
-                  {tyre?.plyRating?.name}
+                  {tyre?.plyRating?.[0]?.name || tyre?.plyRating?.name}
                   {' '}
-                  {tyre?.loadIndex?.name}
+                  {tyre?.loadIndex?.[0]?.name || tyre?.loadIndex?.name}
                   {' '}
-                  {tyre?.speedSymbol?.name}
+                  {tyre?.speedSymbol?.[0]?.name || tyre?.speedSymbol?.name}
                   {' '}
-                  {tyre?.productThreadPattern?.name}
+                  {tyre?.productThreadPattern?.[0]?.name || tyre?.productThreadPattern?.name}
                   {' '}
                   {tyre?.unit}
                 </BreadcrumbPage>
@@ -354,20 +354,20 @@ export default function StaticProductDetails({
               </div>
 
               <h1 className='text-3xl lg:text-4xl font-bold text-slate-900 mb-3 leading-tight'>
-                {tyre?.tyreWidth?.name}
+                {tyre?.tyreWidth?.[0]?.name || tyre?.tyreWidth?.name}
                 {tyre?.tyreWidthType === 'IN MM'
-                  ? `/${tyre?.aspectRatio?.name}`
+                  ? (tyre?.aspectRatio?.[0]?.name || tyre?.aspectRatio?.name ? `/${tyre?.aspectRatio?.[0]?.name || tyre?.aspectRatio?.name}` : '')
                   : ''}
                 {tyre?.construction}
-                {tyre?.rimDiameter?.name}
+                {tyre?.rimDiameter?.[0]?.name || tyre?.rimDiameter?.name}
                 {' '}
-                {tyre?.plyRating?.name}
+                {tyre?.plyRating?.[0]?.name || tyre?.plyRating?.name}
                 {' '}
-                {tyre?.loadIndex?.name}
+                {tyre?.loadIndex?.[0]?.name || tyre?.loadIndex?.name}
                 {' '}
-                {tyre?.speedSymbol?.name}
+                {tyre?.speedSymbol?.[0]?.name || tyre?.speedSymbol?.name}
                 {' '}
-                {tyre?.productThreadPattern?.name}
+                {tyre?.productThreadPattern?.[0]?.name || tyre?.productThreadPattern?.name}
                 {' '}
                 {tyre?.unit}
               </h1>

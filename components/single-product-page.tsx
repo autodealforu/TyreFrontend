@@ -256,20 +256,20 @@ export default function SingleProductPage({
           <>
             {productSpec.productBrand?.name}{' '}
             <span className='font-medium text-gray-600'>
-              {productSpec.tyreWidth?.name}
+              {productSpec.tyreWidth?.[0]?.name || productSpec.tyreWidth?.name}
               {productSpec.tyreWidthType === 'IN MM'
-                ? `/${productSpec.aspectRatio?.name}`
+                ? (productSpec.aspectRatio?.[0]?.name || productSpec.aspectRatio?.name ? `/${productSpec.aspectRatio?.[0]?.name || productSpec.aspectRatio?.name}` : '')
                 : ''}
               {productSpec.construction}
-              {productSpec.rimDiameter?.name}
+              {productSpec.rimDiameter?.[0]?.name || productSpec.rimDiameter?.name}
               {' '}
-              {productSpec.plyRating?.name}
+              {productSpec.plyRating?.[0]?.name || productSpec.plyRating?.name}
               {' '}
-              {productSpec.loadIndex?.name}
+              {productSpec.loadIndex?.[0]?.name || productSpec.loadIndex?.name}
               {' '}
-              {productSpec.speedSymbol?.name}
+              {productSpec.speedSymbol?.[0]?.name || productSpec.speedSymbol?.name}
               {' '}
-              {productSpec.productThreadPattern?.name}
+              {productSpec.productThreadPattern?.[0]?.name || productSpec.productThreadPattern?.name}
               {' '}
               {productSpec.unit}
             </span>
@@ -290,15 +290,19 @@ export default function SingleProductPage({
     if (!productSpec) return 'Product';
 
     switch (productType) {
-      case 'TYRE':
-        const brand = product.productSpec?.productBrand?.name || '';
+        const brand = product.productSpec?.productBrand?.name || product.productSpec?.productBrand?.[0]?.name || '';
         const spec = product.productSpec;
+        const width = spec.tyreWidth?.[0]?.name || spec.tyreWidth?.name || '';
+        const ratio = spec.aspectRatio?.[0]?.name || spec.aspectRatio?.name || '';
+        const diameter = spec.rimDiameter?.[0]?.name || spec.rimDiameter?.name || '';
+        const size = `${width}${spec.tyreWidthType === 'IN MM' && ratio ? `/${ratio}` : ''}${spec.construction || ''}${diameter}`;
+        
         const specs = [
-          `${spec.tyreWidth?.name || ''}${spec.tyreWidthType === 'IN MM' ? `/${spec.aspectRatio?.name || ''}` : ''}${spec.construction || ''}${spec.rimDiameter?.name || ''}`,
-          spec.plyRating?.name,
-          spec.loadIndex?.name,
-          spec.speedSymbol?.name,
-          spec.productThreadPattern?.name,
+          size,
+          spec.plyRating?.[0]?.name || spec.plyRating?.name,
+          spec.loadIndex?.[0]?.name || spec.loadIndex?.name,
+          spec.speedSymbol?.[0]?.name || spec.speedSymbol?.name,
+          spec.productThreadPattern?.[0]?.name || spec.productThreadPattern?.name,
           spec.unit
         ].filter(Boolean).join(' ').trim();
         return `${brand} ${specs}`.trim();
@@ -386,20 +390,20 @@ export default function SingleProductPage({
                 <>
                   {productSpec.productBrand?.name}{' '}
                   <span className='font-medium text-gray-600'>
-                    {productSpec.tyreWidth?.name}
+                    {productSpec.tyreWidth?.[0]?.name || productSpec.tyreWidth?.name}
                     {productSpec.tyreWidthType === 'IN MM'
-                      ? `/${productSpec.aspectRatio?.name}`
+                      ? (productSpec.aspectRatio?.[0]?.name || productSpec.aspectRatio?.name ? `/${productSpec.aspectRatio?.[0]?.name || productSpec.aspectRatio?.name}` : '')
                       : ''}
                     {productSpec.construction}
-                    {productSpec.rimDiameter?.name}
+                    {productSpec.rimDiameter?.[0]?.name || productSpec.rimDiameter?.name}
                     {' '}
-                    {productSpec.plyRating?.name}
+                    {productSpec.plyRating?.[0]?.name || productSpec.plyRating?.name}
                     {' '}
-                    {productSpec.loadIndex?.name}
+                    {productSpec.loadIndex?.[0]?.name || productSpec.loadIndex?.name}
                     {' '}
-                    {productSpec.speedSymbol?.name}
+                    {productSpec.speedSymbol?.[0]?.name || productSpec.speedSymbol?.name}
                     {' '}
-                    {productSpec.productThreadPattern?.name}
+                    {productSpec.productThreadPattern?.[0]?.name || productSpec.productThreadPattern?.name}
                     {' '}
                     {productSpec.unit}
                   </span>

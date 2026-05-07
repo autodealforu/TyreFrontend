@@ -179,13 +179,17 @@ export default function MultiVendorProductListing({
 
     switch (productType) {
       case 'TYRE':
-        const brand = spec.productBrand?.name || 'Unknown Brand';
-        const size = `${spec.tyreWidth?.name || ''}/${spec.aspectRatio?.name || ''}${spec.construction || 'R'}${spec.rimDiameter?.name || ''}`;
+        const brand = spec.productBrand?.name || spec.productBrand?.[0]?.name || 'Unknown Brand';
+        const width = spec.tyreWidth?.name || spec.tyreWidth?.[0]?.name || '';
+        const ratio = spec.aspectRatio?.name || spec.aspectRatio?.[0]?.name || '';
+        const diameter = spec.rimDiameter?.name || spec.rimDiameter?.[0]?.name || '';
+        const size = `${width}${spec.tyreWidthType === 'IN MM' && ratio ? `/${ratio}` : ''}${spec.construction || 'R'}${diameter}`;
+        
         const otherSpecs = [
-          spec.plyRating?.name,
-          spec.loadIndex?.name,
-          spec.speedSymbol?.name,
-          spec.productThreadPattern?.name,
+          spec.plyRating?.name || spec.plyRating?.[0]?.name,
+          spec.loadIndex?.name || spec.loadIndex?.[0]?.name,
+          spec.speedSymbol?.name || spec.speedSymbol?.[0]?.name,
+          spec.productThreadPattern?.name || spec.productThreadPattern?.[0]?.name,
           spec.unit
         ].filter(Boolean).join(' ');
         

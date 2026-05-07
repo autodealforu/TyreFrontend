@@ -535,20 +535,20 @@ export default function TyresPage({ searchParams }: Props) {
                             <h3 className='font-bold text-lg mb-2 line-clamp-2 cursor-pointer text-[#14213d]'>
                               {product.tyre?.productBrand?.name}{' '}
                               <span className='font-medium text-gray-600'>
-                                {product.tyre?.tyreWidth?.name}
+                                {product.tyre?.tyreWidth?.[0]?.name || product.tyre?.tyreWidth?.name}
                                 {product.tyre?.tyreWidthType === 'IN MM'
-                                  ? `/${product.tyre?.aspectRatio?.name}`
+                                  ? (product.tyre?.aspectRatio?.[0]?.name || product.tyre?.aspectRatio?.name ? `/${product.tyre?.aspectRatio?.[0]?.name || product.tyre?.aspectRatio?.name}` : '')
                                   : ''}
                                 {product.tyre?.construction}
-                                {product.tyre?.rimDiameter?.name}
+                                {product.tyre?.rimDiameter?.[0]?.name || product.tyre?.rimDiameter?.name}
                                 {' '}
-                                {product.tyre?.plyRating?.name}
+                                {product.tyre?.plyRating?.[0]?.name || product.tyre?.plyRating?.name}
                                 {' '}
-                                {product.tyre?.loadIndex?.name}
+                                {product.tyre?.loadIndex?.[0]?.name || product.tyre?.loadIndex?.name}
                                 {' '}
-                                {product.tyre?.speedSymbol?.name}
+                                {product.tyre?.speedSymbol?.[0]?.name || product.tyre?.speedSymbol?.name}
                                 {' '}
-                                {product.tyre?.productThreadPattern?.name}
+                                {product.tyre?.productThreadPattern?.[0]?.name || product.tyre?.productThreadPattern?.name}
                                 {' '}
                                 {product.tyre?.unit}
                               </span>
