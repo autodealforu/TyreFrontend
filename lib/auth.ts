@@ -116,7 +116,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async jwt({ token, user, trigger }) {
+    async jwt({ token, user, trigger, session }) {
       console.log('JWT Callback - trigger:', trigger);
       if (user) {
         console.log('JWT Callback - Setting user data in token:', {
@@ -126,12 +126,24 @@ export const authOptions: NextAuthOptions = {
           role: user.role,
         });
         token.id = user.id;
+        token.name = user.name;
+        token.email = user.email;
         token.username = user.username;
         token.phone = user.phone;
         token.address = user.address;
         token.role = user.role;
         token.accessToken = user.token;
       }
+      
+      // Handle session updates (e.g. Profile updates)
+      if (trigger === 'update' && session?.user) {
+        console.log('JWT Callback - Updating token from session:', session.user);
+        token.name = session.user.name || token.name;
+        token.email = session.user.email || token.email;
+        token.phone = session.user.phone || token.phone;
+        token.address = session.user.address || token.address;
+      }
+      
       console.log('JWT Callback - Returning token with id:', token.id);
       return token;
     },
@@ -143,6 +155,8 @@ export const authOptions: NextAuthOptions = {
       });
       if (token && session.user) {
         session.user.id = token.id as string;
+        session.user.name = token.name as string;
+        session.user.email = token.email as string;
         session.user.username = token.username as string;
         session.user.phone = token.phone as string;
         session.user.address = token.address as string;

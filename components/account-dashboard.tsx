@@ -17,6 +17,7 @@ import {
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuth } from '@/hooks/useAuth';
+import { apiClient } from '@/lib/api';
 
 import {
   Card,
@@ -31,60 +32,32 @@ import AccountLayout from './account-layout';
 
 export default function AccountDashboard() {
   const { user, requireAuth } = useAuth();
+  const [recentOrders, setRecentOrders] = useState<any[]>([]);
+  const [upcomingAppointments, setUpcomingAppointments] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   // Protect this component - redirect to login if not authenticated
   useEffect(() => {
     requireAuth();
   }, [requireAuth]);
 
+  useEffect(() => {
+    if (!user?.id) return;
+    setLoading(true);
+    apiClient
+      .get(`/api/orders/customer/${user.id}`)
+      .then((res) => {
+        setRecentOrders(res.data.orders || []);
+      })
+      .catch((err) => {
+        console.error('Error fetching orders:', err);
+      })
+      .finally(() => setLoading(false));
+  }, [user?.id]);
+
   if (!user) {
     return null; // Component will redirect to login
   }
-  const recentOrders = [
-    {
-      id: 'HT-2024-06789',
-      date: 'June 7, 2024',
-      status: 'Confirmed',
-      total: 83996,
-      items: [
-        {
-          name: 'Michelin Pilot Sport 4',
-          quantity: 2,
-          image: '/placeholder.svg?height=60&width=60',
-        },
-        {
-          name: 'Continental PremiumContact 6',
-          quantity: 4,
-          image: '/placeholder.svg?height=60&width=60',
-        },
-      ],
-    },
-    {
-      id: 'HT-2024-06543',
-      date: 'May 25, 2024',
-      status: 'Delivered',
-      total: 45998,
-      items: [
-        {
-          name: 'Bridgestone Turanza T005',
-          quantity: 4,
-          image: '/placeholder.svg?height=60&width=60',
-        },
-      ],
-    },
-  ];
-
-  const upcomingAppointments = [
-    {
-      id: 'JC-2024-00123',
-      date: 'June 12, 2024',
-      time: '10:00 AM',
-      service: 'Tyre Installation & Wheel Balancing',
-      location: 'Autodeal4U Main Store, Sector 18, Noida',
-      status: 'Confirmed',
-    },
-  ];
-
   const quickLinks = [
     {
       title: 'My Orders',
@@ -165,13 +138,17 @@ export default function AccountDashboard() {
           </CardHeader>
           <CardContent>
             <div className='space-y-4'>
-              {recentOrders.map((order) => (
-                <div key={order.id} className='border rounded-lg p-4'>
+              {recentOrders.slice(0, 3).map((order) => (
+                <div key={order.order_id || order._id || order.id} className='border rounded-lg p-4'>
                   <div className='flex justify-between items-start mb-3'>
                     <div>
-                      <div className='font-medium'>Order #{order.id}</div>
+                      <div className='font-medium'>Order #{order.order_id || order.id}</div>
                       <div className='text-sm text-muted-foreground'>
-                        {order.date}
+                        {order.order_date
+                          ? new Date(order.order_date).toLocaleDateString('en-IN')
+                          : order.createdAt
+                          ? new Date(order.createdAt).toLocaleDateString('en-IN')
+                          : '-'}
                       </div>
                     </div>
                     <Badge
@@ -187,39 +164,19 @@ export default function AccountDashboard() {
                   </div>
 
                   <div className='flex items-center gap-3 mb-3'>
-                    <div className='flex -space-x-2'>
-                      {order.items.slice(0, 2).map((item, index) => (
-                        <div
-                          key={index}
-                          className='h-10 w-10 rounded-full border-2 border-white overflow-hidden'
-                        >
-                          <Image
-                            src={item.image || '/placeholder.svg'}
-                            alt={item.name}
-                            width={40}
-                            height={40}
-                          />
-                        </div>
-                      ))}
-                      {order.items.length > 2 && (
-                        <div className='h-10 w-10 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-medium'>
-                          +{order.items.length - 2}
-                        </div>
-                      )}
-                    </div>
-                    <div className='text-sm'>
-                      {order.items[0].name}
-                      {order.items.length > 1 &&
-                        ` and ${order.items.length - 1} more item(s)`}
+                    <div className='text-sm font-medium'>
+                      {order.products?.[0]?.name || 'Items'}
+                      {order.products?.length > 1 &&
+                        ` and ${order.products.length - 1} more item(s)`}
                     </div>
                   </div>
 
                   <div className='flex justify-between items-center'>
                     <div className='font-medium'>
-                      ₹{order.total.toLocaleString('en-IN')}
+                      ₹{(order.total_amount || order.order_summary?.total || 0).toLocaleString('en-IN')}
                     </div>
                     <Button size='sm' variant='outline' asChild>
-                      <Link href={`/account/orders/${order.id}`}>
+                      <Link href={`/account/orders/${order.order_id || order._id || order.id}`}>
                         View Details
                       </Link>
                     </Button>
@@ -339,39 +296,48 @@ export default function AccountDashboard() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className='border rounded-lg p-4'>
-              <div className='flex justify-between items-start mb-3'>
-                <div>
-                  <div className='font-medium'>Order #HT-2024-06789</div>
-                  <div className='text-sm text-muted-foreground'>
-                    Michelin Pilot Sport 4 and 1 more item
+            {recentOrders.length > 0 ? (
+              <div className='border rounded-lg p-4'>
+                <div className='flex justify-between items-start mb-3'>
+                  <div>
+                    <div className='font-medium'>
+                      Order #{recentOrders[0].order_id || recentOrders[0]._id || recentOrders[0].id}
+                    </div>
+                    <div className='text-sm text-muted-foreground'>
+                      {recentOrders[0].products?.[0]?.name || 'Items'}
+                      {recentOrders[0].products?.length > 1 &&
+                        ` and ${recentOrders[0].products.length - 1} more item(s)`}
+                    </div>
+                  </div>
+                  <Badge
+                    variant='outline'
+                    className='bg-blue-50 text-blue-700 hover:bg-blue-50'
+                  >
+                    {recentOrders[0].status || 'In Transit'}
+                  </Badge>
+                </div>
+
+                <div className='space-y-2 mb-3'>
+                  <div className='flex items-center gap-2 text-sm'>
+                    <Truck className='h-4 w-4 text-gray-500' />
+                    <span>Expected delivery: 3-5 business days</span>
                   </div>
                 </div>
-                <Badge
-                  variant='outline'
-                  className='bg-blue-50 text-blue-700 hover:bg-blue-50'
-                >
-                  In Transit
-                </Badge>
-              </div>
 
-              <div className='space-y-2 mb-3'>
-                <div className='flex items-center gap-2 text-sm'>
-                  <Truck className='h-4 w-4 text-gray-500' />
-                  <span>Expected delivery: June 10-12, 2024</span>
-                </div>
-                <div className='flex items-center gap-2 text-sm'>
-                  <MapPin className='h-4 w-4 text-gray-500' />
-                  <span>Last update: Package has left the warehouse</span>
+                <div className='flex justify-end'>
+                  <Button size='sm' variant='outline' asChild>
+                    <Link href={`/account/orders/${recentOrders[0].order_id || recentOrders[0]._id || recentOrders[0].id}`}>
+                      View Details
+                    </Link>
+                  </Button>
                 </div>
               </div>
-
-              <div className='flex justify-end'>
-                <Button size='sm' variant='outline' asChild>
-                  <Link href='/track-order'>Track Order</Link>
-                </Button>
+            ) : (
+              <div className='text-center py-6 text-muted-foreground text-sm'>
+                <Truck className='h-12 w-12 text-gray-300 mx-auto mb-3' />
+                No active deliveries
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
 
