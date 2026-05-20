@@ -54,6 +54,14 @@ export default function Login() {
     email: '',
   });
 
+  // OTP form state
+  const [otpForm, setOtpForm] = useState({
+    phone: '',
+    otp: '',
+  });
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpToken, setOtpToken] = useState('');
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -220,6 +228,76 @@ export default function Login() {
     }, 1500);
   };
 
+  const handleRequestOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpForm.phone || otpForm.phone.length < 10) {
+      toast.error('Please enter a valid phone number');
+      return;
+    }
+    
+    setIsLoading(true);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9042';
+      const response = await fetch(`${apiUrl}/api/users/websites/generate-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: otpForm.phone }),
+      });
+      const data = await response.json();
+      
+      if (!response.ok) throw new Error(data.message || 'Failed to send OTP');
+      
+      setOtpToken(data.token);
+      setOtpSent(true);
+      toast.success('OTP sent successfully!');
+    } catch (error: any) {
+      toast.error(error.message || 'An error occurred while sending OTP');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpForm.otp || otpForm.otp.length < 4) {
+      toast.error('Please enter a valid 4-digit OTP');
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const result = await signIn('otp-login', {
+        phone: otpForm.phone,
+        otp: otpForm.otp,
+        token: otpToken,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast.error(result.error);
+        setIsLoading(false);
+      } else if (result?.ok) {
+        toast.success('Login successful!');
+        
+        await new Promise((resolve) => setTimeout(resolve, 500));
+        
+        if (redirect === 'checkout') {
+          router.push('/checkout');
+        } else if (redirect && redirect !== '/') {
+          router.push(redirect);
+        } else {
+          router.push('/');
+        }
+        setTimeout(() => {
+          router.refresh();
+          setIsLoading(false);
+        }, 100);
+      }
+    } catch (error) {
+      toast.error('An error occurred. Please try again.');
+      setIsLoading(false);
+    }
+  };
   return (
     <Suspense>
       <div className='min-h-screen bg-background'>
@@ -268,10 +346,11 @@ export default function Login() {
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue='login' className='w-full'>
-                  <TabsList className='grid w-full grid-cols-3'>
-                    <TabsTrigger value='login'>Login</TabsTrigger>
-                    <TabsTrigger value='register'>Register</TabsTrigger>
-                    <TabsTrigger value='forgot'>Forgot Password</TabsTrigger>
+                  <TabsList className='grid w-full grid-cols-4 text-xs md:text-sm h-auto p-1'>
+                    <TabsTrigger value='login' className='px-1 py-2 text-xs'>Login</TabsTrigger>
+                    <TabsTrigger value='otp' className='px-1 py-2 text-xs'>OTP Login</TabsTrigger>
+                    <TabsTrigger value='register' className='px-1 py-2 text-xs'>Register</TabsTrigger>
+                    <TabsTrigger value='forgot' className='px-1 py-2 text-xs'>Forgot</TabsTrigger>
                   </TabsList>
 
                   {/* Login Tab */}
@@ -338,12 +417,87 @@ export default function Login() {
                         <Button
                           variant='link'
                           className='p-0 h-auto'
-                          onClick={() => {}}
+                          onClick={() => { }}
                         >
                           Register here
                         </Button>
                       </p>
                     </div>
+                  </TabsContent>
+
+                  {/* OTP Login Tab */}
+                  <TabsContent value='otp' className='space-y-4'>
+                    <div id='recaptcha-container'></div>
+                    {!otpSent ? (
+                      <form onSubmit={handleRequestOTP} className='space-y-4'>
+                        <div className='space-y-2'>
+                          <Label htmlFor='otp-phone'>Phone Number</Label>
+                          <Input
+                            id='otp-phone'
+                            type='tel'
+                            placeholder='Enter your 10-digit phone number'
+                            value={otpForm.phone}
+                            onChange={(e) =>
+                              setOtpForm({
+                                ...otpForm,
+                                phone: e.target.value.replace(/\D/g, ''),
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                        <Button
+                          type='submit'
+                          className='w-full'
+                          disabled={isLoading || otpForm.phone.length < 10}
+                        >
+                          {isLoading ? 'Sending OTP...' : 'Send OTP'}
+                        </Button>
+                      </form>
+                    ) : (
+                      <form onSubmit={handleVerifyOTP} className='space-y-4'>
+                        <div className='space-y-2'>
+                          <Label htmlFor='otp-code'>Enter 4-digit OTP</Label>
+                          <Input
+                            id='otp-code'
+                            type='text'
+                            placeholder='Enter the 4-digit OTP sent to your phone'
+                            value={otpForm.otp}
+                            onChange={(e) =>
+                              setOtpForm({
+                                ...otpForm,
+                                otp: e.target.value.replace(/\D/g, ''),
+                              })
+                            }
+                            required
+                            maxLength={4}
+                          />
+                        </div>
+                        <div className='flex items-center justify-between text-sm'>
+                          <span className='text-muted-foreground'>
+                            Sent to +91 {otpForm.phone}
+                          </span>
+                          <Button
+                            type='button'
+                            variant='link'
+                            className='p-0 h-auto text-xs'
+                            onClick={() => {
+                              setOtpSent(false);
+                              setOtpForm({ ...otpForm, otp: '' });
+                            }}
+                          >
+                            Change Number
+                          </Button>
+                        </div>
+                        <Button
+                          type='submit'
+                          className='w-full'
+                          disabled={isLoading || otpForm.otp.length < 4}
+                        >
+                          {isLoading ? 'Verifying...' : 'Verify & Login'}
+                        </Button>
+                      </form>
+                    )}
                   </TabsContent>
 
                   {/* Register Tab */}
@@ -493,7 +647,7 @@ export default function Login() {
                         <Button
                           variant='link'
                           className='p-0 h-auto'
-                          onClick={() => {}}
+                          onClick={() => { }}
                         >
                           Login here
                         </Button>
@@ -534,7 +688,7 @@ export default function Login() {
                         <Button
                           variant='link'
                           className='p-0 h-auto'
-                          onClick={() => {}}
+                          onClick={() => { }}
                         >
                           Login here
                         </Button>

@@ -8,6 +8,47 @@ const NEXTAUTH_URL = process.env.NEXTAUTH_URL || 'http://localhost:3003';
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
+      id: 'otp-login',
+      name: 'OTP Login',
+      credentials: {
+        phone: { label: 'Phone', type: 'text' },
+        otp: { label: 'OTP', type: 'text' },
+        token: { label: 'Token', type: 'text' },
+      },
+      async authorize(credentials) {
+        if (!credentials?.phone || !credentials?.otp || !credentials?.token) {
+          throw new Error('Please provide phone, OTP, and token');
+        }
+
+        try {
+          const response = await axios.post(`${API_URL}/api/users/websites/verify-otp`, {
+            otp: credentials.otp,
+            token: credentials.token,
+          });
+
+          const user = response.data.user;
+          const token = response.data.token;
+
+          if (user && token) {
+            return {
+              id: user._id,
+              name: user.name,
+              email: user.email || '',
+              username: user.username,
+              phone: user.phone || '',
+              address: user.address || '',
+              role: user.role,
+              token: token,
+            };
+          }
+          return null;
+        } catch (error: any) {
+          const errorMessage = error.response?.data?.message || 'Invalid OTP';
+          throw new Error(errorMessage);
+        }
+      },
+    }),
+    CredentialsProvider({
       name: 'credentials',
       credentials: {
         username: { label: 'Username', type: 'text' },
