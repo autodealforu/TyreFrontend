@@ -71,9 +71,29 @@ import {
   addUserAddress,
   validateCoupon,
   initializePayment,
+  updateOrderPaymentStatus,
 } from '@/actions/order.action';
 import { ApiClient } from '@/lib/api-client';
 import { API_URL } from '@/constants';
+
+// Helper function to load external scripts dynamically in browser
+const loadScript = (src: string): Promise<boolean> => {
+  return new Promise((resolve) => {
+    if (typeof window === 'undefined') {
+      resolve(false);
+      return;
+    }
+    if ((window as any).Razorpay) {
+      resolve(true);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+};
 
 // Helper function to construct proper image URLs
 const getImageUrl = (imagePath: string | undefined): string => {
@@ -441,17 +461,97 @@ export default function CheckoutEnhanced() {
       console.log('Order Products in Response:', orderResult.order?.products);
 
       if (orderResult.success && orderResult.order) {
-        // Handle payment initialization
         if (checkoutState.paymentMethod === 'ONLINE') {
-          const paymentResult = await initializePayment(
-            orderResult.order._id,
-            getTotal(),
-            'ONLINE'
-          );
+          try {
+            // Call the backend to create a Razorpay Order
+            const razorpayResponse = await fetch(`${API_URL}/api/razorpay/create-order`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ amount: getTotal() }),
+            });
 
-          if (paymentResult.success && paymentResult.payment_url) {
-            // Redirect to payment gateway
-            window.location.href = paymentResult.payment_url;
+            if (!razorpayResponse.ok) {
+              throw new Error('Failed to create Razorpay order');
+            }
+
+            const razorpayData = await razorpayResponse.json();
+
+            if (!razorpayData.success || !razorpayData.order) {
+              throw new Error(razorpayData.message || 'Failed to initialize payment order');
+            }
+
+            // Load the Razorpay Checkout SDK script
+            const isScriptLoaded = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+            if (!isScriptLoaded) {
+              toast.error('Failed to load Razorpay SDK. Please check your internet connection.');
+              updateCheckoutState({ isProcessing: false });
+              return;
+            }
+
+            // Open the Razorpay checkout modal
+            const options = {
+              key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || 'rzp_test_SwHDwTn8mGkDmv',
+              amount: razorpayData.order.amount,
+              currency: razorpayData.order.currency,
+              name: 'Autodeal4U',
+              description: `Order Payment #${orderResult.order.order_id}`,
+              image: 'https://pickkro.com/assets/images/icon/logo.png',
+              order_id: razorpayData.order.id,
+              prefill: {
+                name: session.user.name || '',
+                email: session.user.email || '',
+                contact: selectedShippingAddress.phone || '',
+              },
+              theme: {
+                color: '#14213d',
+              },
+              handler: async function (response: any) {
+                try {
+                  toast.success('Payment authorized. Confirming order...');
+                  
+                  // Update order's payment status to SUCCESS
+                  const paymentUpdateResult = await updateOrderPaymentStatus(
+                    orderResult.order._id,
+                    'SUCCESS',
+                    response.razorpay_payment_id,
+                    'RAZORPAY',
+                    session.accessToken
+                  );
+
+                  if (paymentUpdateResult.success) {
+                    // Clear cart and redirect to thank you page
+                    updateCheckoutState({ isSuccess: true });
+                    clearCart();
+                    localStorage.removeItem('appliedCouponCode');
+                    router.push(`/thank-you?orderId=${orderResult.order.order_id}`);
+                    toast.success('Payment successful! Your order has been placed.');
+                  } else {
+                    toast.error('Payment succeeded, but we failed to update order status. Please contact support.');
+                    updateCheckoutState({ isProcessing: false });
+                  }
+                } catch (updateErr) {
+                  console.error('Failed to update order payment status:', updateErr);
+                  toast.error('Failed to confirm payment on server. Please contact support.');
+                  updateCheckoutState({ isProcessing: false });
+                }
+              },
+              modal: {
+                ondismiss: function () {
+                  toast.error('Payment cancelled. You can retry placing the order.');
+                  updateCheckoutState({ isProcessing: false });
+                },
+              },
+            };
+
+            const rzp = new (window as any).Razorpay(options);
+            rzp.open();
+            return;
+          } catch (razorpayErr: any) {
+            console.error('Razorpay flow error:', razorpayErr);
+            toast.error(razorpayErr.message || 'Something went wrong while initiating Razorpay payment.');
+            updateCheckoutState({ isProcessing: false });
             return;
           }
         }

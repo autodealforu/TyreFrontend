@@ -352,3 +352,56 @@ export async function initializePayment(
     };
   }
 }
+
+export async function updateOrderPaymentStatus(
+  orderId: string,
+  paymentStatus: string,
+  transactionId: string,
+  gateway: string,
+  token?: string
+): Promise<{
+  success: boolean;
+  message?: string;
+  order?: any;
+  error?: any;
+}> {
+  try {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_URL}/api/orders/${orderId}/payment-status`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({
+        payment_status: paymentStatus,
+        transaction_id: transactionId,
+        gateway,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+
+    return {
+      success: result.success,
+      message: result.message,
+      order: result.order,
+    };
+  } catch (error) {
+    console.error('Error updating payment status:', error);
+    return {
+      success: false,
+      message: 'Failed to update payment status',
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
