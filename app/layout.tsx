@@ -22,6 +22,10 @@ export const metadata: Metadata = {
   keywords:
     'tyres, alloy wheels, car tyres, bike tyres, tyre shop, multi-vendor, automotive parts, vehicle accessories, professional installation',
   generator: 'v0.app',
+  robots: {
+    index: true,
+    follow: true,
+  }
 };
 
 export default function RootLayout({
