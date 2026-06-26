@@ -341,7 +341,7 @@ export default function CheckoutEnhanced() {
 
       const orderData: CreateOrderRequest = {
         status: 'PENDING',
-        is_paid: checkoutState.paymentMethod === 'COD' ? false : true,
+        is_paid: false,
         payment_method: checkoutState.paymentMethod,
         total_amount: getTotal(),
         sub_total: getSubtotal(),
