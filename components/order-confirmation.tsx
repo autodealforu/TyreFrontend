@@ -588,9 +588,15 @@ export default function OrderConfirmation() {
                     View All Orders
                   </Link>
                 </Button>
-                <Button variant='outline' className='w-full'>
-                  <Download className='h-4 w-4 mr-2' />
-                  Download Invoice
+                <Button variant='outline' className='w-full' asChild>
+                  <a
+                    href={`${API_URL || 'http://localhost:9042'}/api/orders/${order._id || order.order_id}/invoice`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
+                    <Download className='h-4 w-4 mr-2' />
+                    Download Tax Invoice
+                  </a>
                 </Button>
                 <Button variant='outline' className='w-full'>
                   <Share2 className='h-4 w-4 mr-2' />

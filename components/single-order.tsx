@@ -199,9 +199,15 @@ export default function SingleOrder() {
 
             {/* Action Buttons */}
             <div className='flex flex-wrap gap-4'>
-              <Button>
-                <Download className='h-4 w-4 mr-2' />
-                Download Invoice
+              <Button asChild>
+                <a
+                  href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:9042'}/api/orders/${order?._id || orderId}/invoice`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <Download className='h-4 w-4 mr-2' />
+                  Download Invoice
+                </a>
               </Button>
               <Button variant='outline'>
                 <Share2 className='h-4 w-4 mr-2' />
