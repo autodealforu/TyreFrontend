@@ -310,14 +310,12 @@ function transformJobCard(rawJobCard: RawJobCard): JobCard {
   };
 }
 
+const API_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://api.autodeal4u.in').replace(/\/$/, '');
+
 export async function getJobCards(token: string, customerId?: string) {
   try {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://13.211.190.176:9042';
-
-    // Build query params to filter by customer if customerId is provided
-    let url = `${apiUrl}/api/job-cards`;
+    let url = `${API_URL}/api/job-cards`;
     if (customerId) {
-      // Use URLSearchParams for proper encoding
       const params = new URLSearchParams();
       params.append('exact[customer]', customerId);
       url += `?${params.toString()}`;
@@ -341,12 +339,7 @@ export async function getJobCards(token: string, customerId?: string) {
 
     const data = await response.json();
     console.log('Raw API response:', data);
-    console.log(
-      'Number of job cards returned:',
-      data.jobCards?.length || data.length || 0
-    );
 
-    // Ensure we always return an array
     let rawJobCards: RawJobCard[] = [];
     if (Array.isArray(data)) {
       rawJobCards = data;
@@ -356,7 +349,6 @@ export async function getJobCards(token: string, customerId?: string) {
       rawJobCards = data.data;
     }
 
-    // Transform each job card to our expected format with error handling
     const transformedJobCards = rawJobCards
       .map((rawJobCard) => {
         try {
@@ -367,8 +359,6 @@ export async function getJobCards(token: string, customerId?: string) {
         }
       })
       .filter((jobCard): jobCard is JobCard => jobCard !== null);
-
-    console.log('Transformed job cards:', transformedJobCards);
 
     return {
       data: transformedJobCards,
@@ -389,7 +379,7 @@ export async function createJobCard(
 ) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/job-cards`,
+      `${API_URL}/api/job-cards`,
       {
         method: 'POST',
         headers: {
@@ -424,7 +414,7 @@ export async function updateJobCard(
 ) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/job-cards/${jobCardId}`,
+      `${API_URL}/api/job-cards/${jobCardId}`,
       {
         method: 'PUT',
         headers: {
@@ -455,7 +445,7 @@ export async function updateJobCard(
 export async function cancelJobCard(token: string, jobCardId: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/job-cards/${jobCardId}/cancel`,
+      `${API_URL}/api/job-cards/${jobCardId}/cancel`,
       {
         method: 'PUT',
         headers: {
@@ -485,7 +475,7 @@ export async function cancelJobCard(token: string, jobCardId: string) {
 export async function getJobCardById(token: string, jobCardId: string) {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/job-cards/${jobCardId}`,
+      `${API_URL}/api/job-cards/${jobCardId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

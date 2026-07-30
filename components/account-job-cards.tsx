@@ -52,7 +52,7 @@ const formatVehicle = (vehicle: any): string => {
 };
 
 export default function AccountJobCards() {
-  const { user, accessToken } = useAuth();
+  const { user, accessToken, isLoading: authLoading } = useAuth();
   const [jobCards, setJobCards] = useState<JobCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -81,38 +81,29 @@ export default function AccountJobCards() {
   });
 
   useEffect(() => {
+    if (authLoading) return;
+
     if (!accessToken) {
       setLoading(false);
       return;
     }
 
-    // Wait for user to be loaded before fetching job cards
-    if (!user?._id) {
-      console.log('Waiting for user to be loaded...');
-      return;
-    }
+    const userId = (user as any)?._id || (user as any)?.id || (user as any)?.customer_id || undefined;
 
     const fetchJobCards = async () => {
       try {
-        // Pass user ID to filter job cards for the logged-in customer
-        console.log('Fetching job cards for user:', user._id);
-        const result = await getJobCards(accessToken, user._id);
+        console.log('Fetching job cards for user:', userId);
+        const result = await getJobCards(accessToken, userId);
         console.log('Job cards result:', result);
         if (result.error) {
           console.warn('API Error:', result.error);
-          toast.error('Failed to fetch job cards - ' + result.error);
           setJobCards([]);
         } else {
           const jobCardsData = Array.isArray(result.data) ? result.data : [];
-          // Data is already transformed in the action, no need for sanitizeJobCard
           setJobCards(jobCardsData);
-          if (jobCardsData.length === 0) {
-            toast.info('No job cards found');
-          }
         }
       } catch (error) {
         console.error('Error fetching job cards:', error);
-        toast.error('Failed to fetch job cards');
         setJobCards([]);
       } finally {
         setLoading(false);
@@ -120,7 +111,7 @@ export default function AccountJobCards() {
     };
 
     fetchJobCards();
-  }, [accessToken, user?._id]);
+  }, [accessToken, user, authLoading]);
 
   const handleCancelJobCard = async (jobCardId: string) => {
     if (!accessToken) return;

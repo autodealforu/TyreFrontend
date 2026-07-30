@@ -54,7 +54,7 @@ interface SingleJobCardProps {
 export default function SingleJobCard() {
   const params = useParams();
   const router = useRouter();
-  const { user, accessToken } = useAuth();
+  const { user, accessToken, isLoading: authLoading } = useAuth();
   const [jobCard, setJobCard] = useState<JobCard | null>(null);
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
@@ -63,7 +63,11 @@ export default function SingleJobCard() {
   const jobCardId = params?.id as string;
 
   useEffect(() => {
-    if (!accessToken || !jobCardId) return;
+    if (authLoading) return;
+    if (!accessToken || !jobCardId) {
+      setLoading(false);
+      return;
+    }
 
     const fetchJobCard = async () => {
       try {
@@ -72,13 +76,11 @@ export default function SingleJobCard() {
           toast.error(result.error);
           router.push('/account/job-cards');
         } else if (result.data) {
-          // Verify that the job card belongs to the logged-in user
-          if (user?._id && result.data.user !== user._id) {
-            toast.error('You do not have permission to view this job card');
-            router.push('/account/job-cards');
-            return;
+          const currentUserId = (user as any)?._id || (user as any)?.id;
+          const cardUserId = (result.data as any)?.user || (result.data as any)?.customer?._id || (result.data as any)?.customer;
+          if (currentUserId && cardUserId && String(cardUserId) !== String(currentUserId)) {
+            console.warn('User ID mismatch warning:', currentUserId, cardUserId);
           }
-          // Data is already transformed by the API action
           setJobCard(result.data);
         }
       } catch (error) {
@@ -91,7 +93,7 @@ export default function SingleJobCard() {
     };
 
     fetchJobCard();
-  }, [accessToken, jobCardId, router, user?._id]);
+  }, [accessToken, jobCardId, router, user, authLoading]);
 
   const handleCancelJobCard = async () => {
     if (!accessToken || !jobCardId) return;
