@@ -118,6 +118,115 @@ export default function SingleJobCard() {
     }
   };
 
+  const handleDownloadReceipt = () => {
+    if (!jobCard) return;
+
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      toast.error('Please allow popups to download receipt');
+      return;
+    }
+
+    const servicesHtml = (jobCard.services || []).map((s) => `
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${s.name || 'Service'}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: center;">${s.quantity || 1}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right;">₹${(s.cost || 0).toLocaleString('en-IN')}</td>
+      </tr>
+    `).join('') || `
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #e5e7eb;">${jobCard.service || 'Vehicle Service'}</td>
+        <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: center;">1</td>
+        <td style="padding: 10px; border-bottom: 1px solid #e5e7eb; text-align: right;">₹${(jobCard.totalCost || 0).toLocaleString('en-IN')}</td>
+      </tr>
+    `;
+
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Job Card Receipt - #${jobCard.id || jobCard._id}</title>
+        <style>
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1f2937; padding: 40px; background: #fff; }
+          .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2563eb; padding-bottom: 20px; margin-bottom: 30px; }
+          .logo { font-size: 24px; font-weight: bold; color: #1e3a8a; }
+          .title { font-size: 20px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: #3b82f6; }
+          .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+          .box { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+          .box h3 { margin-top: 0; font-size: 14px; text-transform: uppercase; color: #64748b; margin-bottom: 8px; }
+          table { width: 100%; border-collapse: collapse; margin-bottom: 30px; }
+          th { background: #1e293b; color: #fff; text-align: left; padding: 12px; font-size: 14px; }
+          .total { text-align: right; font-size: 18px; font-weight: bold; color: #0f172a; border-top: 2px solid #cbd5e1; padding-top: 15px; }
+          .footer { text-align: center; margin-top: 50px; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+          @media print { body { padding: 0; } }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div>
+            <div class="logo">AutoDeal4U</div>
+            <div style="font-size: 12px; color: #64748b;">Premium Tyre & Vehicle Solutions</div>
+          </div>
+          <div>
+            <div class="title">Job Card Receipt</div>
+            <div style="font-size: 13px; color: #475569; text-align: right; margin-top: 4px;">Receipt #${jobCard.id || jobCard._id}</div>
+            <div style="font-size: 12px; color: #64748b; text-align: right;">Date: ${jobCard.date || new Date().toLocaleDateString('en-IN')}</div>
+          </div>
+        </div>
+
+        <div class="grid">
+          <div class="box">
+            <h3>Customer Details</h3>
+            <strong>${jobCard.customerName || 'Customer'}</strong><br/>
+            ${jobCard.customerPhone ? `Phone: ${jobCard.customerPhone}<br/>` : ''}
+            ${jobCard.customerEmail ? `Email: ${jobCard.customerEmail}<br/>` : ''}
+            ${jobCard.address ? `Address: ${jobCard.address}` : ''}
+          </div>
+          <div class="box">
+            <h3>Vendor & Workshop Details</h3>
+            <strong>${jobCard.vendorName || 'AutoDeal4U Service Station'}</strong><br/>
+            ${jobCard.vendorPhone ? `Phone: ${jobCard.vendorPhone}<br/>` : ''}
+            ${jobCard.vendorLocation ? `Location: ${jobCard.vendorLocation}` : ''}
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Service Item</th>
+              <th style="text-align: center;">Qty</th>
+              <th style="text-align: right;">Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${servicesHtml}
+          </tbody>
+        </table>
+
+        <div class="total">
+          Total Cost: ₹${(jobCard.totalCost || 0).toLocaleString('en-IN')}
+          <div style="font-size: 13px; font-weight: normal; color: #64748b; margin-top: 4px;">
+            Payment Status: <span style="font-weight: bold; color: ${jobCard.paymentStatus === 'Paid' ? '#16a34a' : '#d97706'};">${jobCard.paymentStatus || 'Pending'}</span>
+          </div>
+        </div>
+
+        <div class="footer">
+          Thank you for choosing AutoDeal4U. For support, contact support@autodeal4u.in | +91 98765 43210
+        </div>
+
+        <script>
+          window.onload = function() {
+            window.print();
+          };
+        </script>
+      </body>
+      </html>
+    `;
+
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'Completed':

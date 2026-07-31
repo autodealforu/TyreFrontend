@@ -11,6 +11,7 @@ import {
   Calendar,
   Truck,
   CheckCircle,
+  Wrench,
 } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -206,39 +207,69 @@ export default function AccountOrders() {
 
                   {/* Products */}
                   <div className='space-y-3 mb-4'>
-                    {order.products?.map((item, index) => (
-                      <div
-                        key={item._id || index}
-                        className='flex items-center gap-4'
-                      >
-                        {/* No image in API, so use placeholder */}
-                        <Image
-                          src={'/placeholder.svg'}
-                          alt={item.name}
-                          width={60}
-                          height={60}
-                          className='rounded-lg'
-                        />
-                        <div className='flex-1'>
-                          <div className='font-medium'>{item.name}</div>
-                          <div className='text-sm text-muted-foreground'>
-                            {item.brand} • Size: {item.size} • Qty:{' '}
-                            {item.quantity}
+                    {order.products?.map((item, index) => {
+                      const rawImg =
+                        item.image ||
+                        item.images?.[0] ||
+                        (item.product as any)?.image ||
+                        (item.product as any)?.images?.[0] ||
+                        (item.product as any)?.product_images?.[0] ||
+                        (item.product as any)?.tyre?.productImages?.[0] ||
+                        (item.product as any)?.alloy_wheel?.productImages?.[0] ||
+                        (item.product as any)?.service?.serviceImages?.[0];
+
+                      const fullImgUrl = rawImg
+                        ? rawImg.startsWith('http')
+                          ? rawImg
+                          : `${(process.env.NEXT_PUBLIC_API_URL || 'https://api.autodeal4u.in').replace(/\/$/, '')}/${rawImg.replace(/^\//, '')}`
+                        : null;
+
+                      return (
+                        <div
+                          key={item._id || index}
+                          className='flex items-center gap-4'
+                        >
+                          {fullImgUrl ? (
+                            <img
+                              src={fullImgUrl}
+                              alt={item.name}
+                              className='w-14 h-14 object-cover rounded-lg border border-gray-200 bg-white'
+                              onError={(e) => {
+                                (e.target as HTMLElement).style.display = 'none';
+                                const fallback = (e.target as HTMLElement).nextElementSibling;
+                                if (fallback) fallback.classList.remove('hidden');
+                              }}
+                            />
+                          ) : null}
+                          <div
+                            className={`w-14 h-14 rounded-lg bg-gradient-to-br from-blue-50 to-indigo-100 border border-blue-200 flex items-center justify-center text-blue-600 shrink-0 ${
+                              fullImgUrl ? 'hidden' : ''
+                            }`}
+                          >
+                            <Wrench className='w-6 h-6' />
                           </div>
-                          <div className='text-xs text-muted-foreground'>
-                            Vendor: {item.vendor_details?.name || 'Vendor Unavailable'}
+                          <div className='flex-1'>
+                            <div className='font-medium'>{item.name}</div>
+                            <div className='text-sm text-muted-foreground'>
+                              {item.brand ? `${item.brand} • ` : ''}
+                              {item.size ? `Size: ${item.size} • ` : ''}
+                              Qty: {item.quantity}
+                            </div>
+                            <div className='text-xs text-muted-foreground'>
+                              Vendor: {item.vendor_details?.name || 'Vendor Unavailable'}
+                            </div>
+                          </div>
+                          <div className='text-right'>
+                            <div className='font-medium'>
+                              ₹{item.sale_price?.toLocaleString('en-IN')}
+                            </div>
+                            <div className='text-sm text-muted-foreground'>
+                              per item
+                            </div>
                           </div>
                         </div>
-                        <div className='text-right'>
-                          <div className='font-medium'>
-                            ₹{item.sale_price?.toLocaleString('en-IN')}
-                          </div>
-                          <div className='text-sm text-muted-foreground'>
-                            per item
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {/* Addresses */}
