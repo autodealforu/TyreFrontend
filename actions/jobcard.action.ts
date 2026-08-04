@@ -255,6 +255,23 @@ function transformJobCard(rawJobCard: RawJobCard): JobCard {
     location = typeof address === 'string' ? address : 'Customer location';
   }
 
+  // Calculate dynamic total cost if service_total_cost is missing or 0
+  const servicesSum = (rawJobCard.services_used || []).reduce((acc, s) => {
+    return acc + (Number(s.service_total_cost) || ((Number(s.service_cost) || 0) * (Number(s.service_quantity) || 1)));
+  }, 0);
+  const productsSum = (rawJobCard.products_used || []).reduce((acc, p) => {
+    return acc + (Number(p.product_total_cost) || ((Number(p.product_cost) || 0) * (Number(p.product_quantity) || 1)));
+  }, 0);
+  const partsSum = (rawJobCard.service_parts_used || []).reduce((acc, pt) => {
+    return acc + (Number(pt.part_total_cost) || ((Number(pt.part_cost) || 0) * (Number(pt.part_quantity) || 1)));
+  }, 0);
+  const laborCostNum = Number(rawJobCard.service_labor_cost) || 0;
+  const calculatedTotal = servicesSum + productsSum + partsSum + laborCostNum;
+
+  const finalTotalCost = (rawJobCard.service_total_cost && rawJobCard.service_total_cost > 0)
+    ? rawJobCard.service_total_cost
+    : calculatedTotal;
+
   return {
     _id: rawJobCard._id,
     id: `JC${rawJobCard.job_card_number || 'N/A'}`,
@@ -266,7 +283,7 @@ function transformJobCard(rawJobCard: RawJobCard): JobCard {
     vehicle: vehicleDisplay,
     tyres: [], // Will be populated from services_used if needed
     estimatedDuration: 'Duration not specified', // Not in API response
-    cost: rawJobCard.service_total_cost || 0,
+    cost: finalTotalCost,
     technician: undefined, // Would need to fetch technician details
     user: rawJobCard.customer?._id || '',
     createdAt: rawJobCard.created_at,
@@ -278,7 +295,7 @@ function transformJobCard(rawJobCard: RawJobCard): JobCard {
     serviceType: rawJobCard.service_type,
     description: rawJobCard.service_description,
     laborCost: rawJobCard.service_labor_cost,
-    totalCost: rawJobCard.service_total_cost,
+    totalCost: finalTotalCost,
     // New rich data fields with null checks
     customerPhone: rawJobCard.customer?.phone,
     customerEmail: rawJobCard.customer?.email,
