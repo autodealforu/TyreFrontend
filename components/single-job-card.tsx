@@ -799,11 +799,9 @@ export default function SingleJobCard() {
         <Card>
           <CardContent className='p-6'>
             <div className='flex flex-wrap gap-3'>
-              <Button variant='outline' asChild>
-                <Link href={`/account/job-cards/${jobCard._id}/download`}>
-                  <Download className='h-4 w-4 mr-2' />
-                  Download Receipt
-                </Link>
+              <Button variant='outline' onClick={handleDownloadReceipt}>
+                <Download className='h-4 w-4 mr-2' />
+                Download Receipt
               </Button>
 
               {canCancelJobCard(jobCard.status) && (
